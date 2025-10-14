@@ -44,12 +44,12 @@ jobs:
       # 5. Bygg Docker-imagen (nu med nytränad model.joblib)
       - name: Build Docker image
         run: |
-          docker build -t ghcr.io/fikafredrik/maio3:${GITHUB_REF_NAME} .
+          docker build -t ghcr.io/fikafredrik/maiov2:${GITHUB_REF_NAME} .
 
       # 6. Ladda upp Docker-imagen till GHCR
       - name: Push Docker image
         run: |
-          docker push ghcr.io/fikafredrik/maio3:${GITHUB_REF_NAME}
+          docker push ghcr.io/fikafredrik/maiov2:${GITHUB_REF_NAME}
 
       # 7. Skapa GitHub Release
       - name: Create GitHub Release
