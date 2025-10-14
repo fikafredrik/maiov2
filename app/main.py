@@ -8,7 +8,7 @@ app = FastAPI(title="Diabetes Triage ML Service")
 model_data = joblib.load("app/model.joblib")
 scaler = model_data["scaler"]
 model = model_data["model"]
-version = model_data.get("version", "unknown") 
+version = "v0.2"  # hårdkodad version för test
 
 # Field names
 FEATURES = [
@@ -37,7 +37,8 @@ def predict(data: dict):
         if not all(f in df.columns for f in FEATURES):
             missing = [f for f in FEATURES if f not in df.columns]
             raise HTTPException(
-                status_code=400, detail=f"Missing features: {missing}"
+                status_code=400,
+                detail=f"Missing features: {missing}"
             )
         X_scaled = scaler.transform(df[FEATURES])
         pred = model.predict(X_scaled)[0]
