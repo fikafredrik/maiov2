@@ -13,7 +13,8 @@ threshold = model_data.get("threshold", None)  # Tröskel för "high-risk"
 
 # === Featurelista ===
 FEATURES = [
-    "age", "sex", "bmi", "bp", "s1", "s2", "s3", "s4", "s5", "s6"
+    "age", "sex", "bmi", "bp", "s1",
+    "s2", "s3", "s4", "s5", "s6"
 ]
 
 
@@ -32,7 +33,10 @@ def predict(data: dict):
         # Kontrollera att alla features finns
         missing = [f for f in FEATURES if f not in df.columns]
         if missing:
-            raise HTTPException(status_code=400, detail=f"Missing features: {missing}")
+            raise HTTPException(
+                status_code=400,
+                detail=f"Missing features: {missing}"
+            )
 
         # Kontrollera att värdena är numeriska
         for col in FEATURES:
@@ -40,7 +44,10 @@ def predict(data: dict):
             if not isinstance(val, (int, float)):
                 raise HTTPException(
                     status_code=400,
-                    detail=f"Feature '{col}' måste vara numerisk, fick: {val}"
+                    detail=(
+                        f"Feature '{col}' måste vara numerisk, "
+                        f"fick: {val}"
+                    )
                 )
 
         # Skala och predicera
