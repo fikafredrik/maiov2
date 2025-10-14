@@ -1,3 +1,5 @@
+import random
+import numpy as np
 from sklearn.datasets import load_diabetes
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
@@ -5,9 +7,12 @@ from sklearn.linear_model import Ridge
 from sklearn.metrics import mean_squared_error, precision_score, recall_score
 import joblib
 import math
-import numpy as np
+import json
 
+# === Version & seeds (för reproducerbarhet) ===
 version = "v0.2"
+np.random.seed(42)
+random.seed(42)
 
 # === 1. Ladda data ===
 data = load_diabetes(as_frame=True)
@@ -53,10 +58,24 @@ model_artifact = {
 }
 joblib.dump(model_artifact, "app/model.joblib")
 
-# === 8. Logga metrics för CHANGELOG.md ===
+# === 8. Logga metrics till JSON ===
+metrics = {
+    "version": version,
+    "rmse": round(rmse, 2),
+    "precision": round(precision, 2),
+    "recall": round(recall, 2),
+    "threshold": round(threshold, 2)
+}
+
+with open("metrics.json", "w", encoding="utf-8") as f:
+    json.dump(metrics, f, indent=2)
+
+# === 9. Uppdatera CHANGELOG ===
 with open("CHANGELOG.md", "a", encoding="utf-8") as f:
     f.write("\n## v0.2\n")
     f.write("- Improved model: Ridge Regression (alpha=1.0)\n")
     f.write(f"- RMSE: {rmse:.2f}\n")
     f.write(f"- Precision (high-risk): {precision:.2f}\n")
     f.write(f"- Recall (high-risk): {recall:.2f}\n")
+
+print("✅ Metrics saved to metrics.json and CHANGELOG.md updated.")
