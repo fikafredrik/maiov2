@@ -7,6 +7,7 @@ import joblib
 import math
 import numpy as np
 
+
 # === 1. Ladda data ===
 data = load_diabetes(as_frame=True)
 X = data.frame.drop(columns=["target"])
@@ -31,8 +32,8 @@ y_pred = model.predict(X_test_scaled)
 rmse = math.sqrt(mean_squared_error(y_test, y_pred))
 print(f"RMSE (v0.2 - Ridge): {rmse:.2f}")
 
-# === 6. Skapa "high-risk" flagg ===
-# Vi sätter en tröskel: top 25% av riskprediktionerna räknas som "high-risk"
+# === 6. Skapa high-risk flagg ===
+# Tröskel: top 25 % av riskprediktionerna räknas som "high-risk"
 threshold = np.percentile(y_train, 75)
 y_test_highrisk = (y_test > threshold).astype(int)
 y_pred_highrisk = (y_pred > threshold).astype(int)
@@ -50,9 +51,9 @@ joblib.dump(
 )
 
 # === 8. Logga metrics för CHANGELOG.md ===
-with open("CHANGELOG.md", "a") as f:
+with open("CHANGELOG.md", "a", encoding="utf-8") as f:
     f.write("\n## v0.2\n")
-    f.write(f"- Improved model: Ridge Regression (alpha=1.0)\n")
+    f.write("- Improved model: Ridge Regression (alpha=1.0)\n")
     f.write(f"- RMSE: {rmse:.2f}\n")
     f.write(f"- Precision (high-risk): {precision:.2f}\n")
     f.write(f"- Recall (high-risk): {recall:.2f}\n")
