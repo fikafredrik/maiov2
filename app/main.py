@@ -8,6 +8,7 @@ app = FastAPI(title="Diabetes Triage ML Service")
 model_data = joblib.load("app/model.joblib")
 scaler = model_data["scaler"]
 model = model_data["model"]
+version = model_data.get("version", "unknown") 
 
 # Field names
 FEATURES = [
@@ -26,7 +27,7 @@ FEATURES = [
 
 @app.get("/health")
 def health():
-    return {"status": "ok", "model_version": "v0.1"}
+    return {"status": "ok", "model_version": version}
 
 
 @app.post("/predict")
