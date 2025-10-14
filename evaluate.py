@@ -1,8 +1,10 @@
 import joblib
 import math
+import numpy as np
+import pandas as pd
 from sklearn.datasets import load_diabetes
 from sklearn.metrics import mean_squared_error, precision_score, recall_score
-import numpy as np
+from sklearn.model_selection import train_test_split
 
 # === 1. Ladda modell och scaler ===
 model_data = joblib.load("app/model.joblib")
@@ -17,7 +19,6 @@ X = data.frame.drop(columns=["target"])
 y = data.frame["target"]
 
 # === 3. Dela data samma sätt som i train.py ===
-from sklearn.model_selection import train_test_split
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=42
 )
