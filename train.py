@@ -7,6 +7,7 @@ import joblib
 import math
 import numpy as np
 
+version = "v0.2"
 
 # === 1. Ladda data ===
 data = load_diabetes(as_frame=True)
@@ -46,7 +47,7 @@ print(f"Recall (high-risk flag): {recall:.2f}")
 
 # === 7. Spara modell och scaler ===
 joblib.dump(
-    {"model": model, "scaler": scaler, "threshold": threshold},
+    {"model": model, "scaler": scaler, "threshold": threshold, "version": version},
     "app/model.joblib"
 )
 
