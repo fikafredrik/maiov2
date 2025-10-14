@@ -34,7 +34,6 @@ rmse = math.sqrt(mean_squared_error(y_test, y_pred))
 print(f"RMSE (v0.2 - Ridge): {rmse:.2f}")
 
 # === 6. Skapa high-risk flagg ===
-# Tröskel: top 25 % av riskprediktionerna räknas som "high-risk"
 threshold = np.percentile(y_train, 75)
 y_test_highrisk = (y_test > threshold).astype(int)
 y_pred_highrisk = (y_pred > threshold).astype(int)
@@ -46,10 +45,13 @@ print(f"Precision (high-risk flag): {precision:.2f}")
 print(f"Recall (high-risk flag): {recall:.2f}")
 
 # === 7. Spara modell och scaler ===
-joblib.dump(
-    {"model": model, "scaler": scaler, "threshold": threshold, "version": version},
-    "app/model.joblib"
-)
+model_artifact = {
+    "model": model,
+    "scaler": scaler,
+    "threshold": threshold,
+    "version": version
+}
+joblib.dump(model_artifact, "app/model.joblib")
 
 # === 8. Logga metrics för CHANGELOG.md ===
 with open("CHANGELOG.md", "a", encoding="utf-8") as f:
