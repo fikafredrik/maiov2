@@ -1,0 +1,44 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  test-and-smoke:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install --upgrade scikit-learn   # force latest version
+          pip install -r requirements.txt
+
+      - name: Lint
+        run: flake8 .
+
+      # Träna modellen FÖRE testerna
+      - name: Train model
+        run: |
+          mkdir -p app
+          python train.py
+
+      - name: Unit Tests
+        run: pytest
+
+      #  Ladda upp modellen som artefakt
+      - name: Upload model artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: model-artifact
+          path: app/model.joblib
