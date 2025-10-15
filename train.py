@@ -77,5 +77,3 @@ with open("CHANGELOG.md", "a", encoding="utf-8") as f:
     f.write(f"- RMSE: {rmse:.2f}\n")
     f.write(f"- Precision (high-risk): {precision:.2f}\n")
     f.write(f"- Recall (high-risk): {recall:.2f}\n")
-
-print("✅ Metrics saved to metrics.json and CHANGELOG.md updated.")
