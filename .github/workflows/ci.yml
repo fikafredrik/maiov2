@@ -7,7 +7,7 @@ on:
     branches: [main]
 
 jobs:
-  test-and-smoke:
+  test-and-evaluate:
     runs-on: ubuntu-latest
 
     steps:
@@ -27,18 +27,30 @@ jobs:
       - name: Lint
         run: flake8 .
 
-      # Träna modellen FÖRE testerna
+      # === Träna modellen ===
       - name: Train model
         run: |
           mkdir -p app
           python train.py
 
+      # === Enkla enhetstester ===
       - name: Unit Tests
         run: pytest
 
-      #  Ladda upp modellen som artefakt
+      # === Utvärdera modellen (RMSE, precision, recall) ===
+      - name: Evaluate model
+        run: python evaluate.py
+
+      # === Ladda upp modellartefakt ===
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
           path: app/model.joblib
+
+      # === Ladda upp metrics.json som artefakt ===
+      - name: Upload metrics
+        uses: actions/upload-artifact@v4
+        with:
+          name: metrics
+          path: metrics.json
