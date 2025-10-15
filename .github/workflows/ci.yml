@@ -39,7 +39,7 @@ jobs:
 
       # === Utvärdera modellen (RMSE, precision, recall) ===
       - name: Evaluate model
-        run: python evaluate.py
+        run: python app/evaluate.py
 
       # === Ladda upp modellartefakt ===
       - name: Upload model artifact
