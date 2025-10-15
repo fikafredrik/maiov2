@@ -21,36 +21,28 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install --upgrade scikit-learn   # force latest version
+          pip install --upgrade scikit-learn
           pip install -r requirements.txt
 
-      - name: Lint
+      - name: Lint code
         run: flake8 .
 
-      # === Träna modellen ===
       - name: Train model
+        working-directory: .
         run: |
           mkdir -p app
           python train.py
 
-      # === Enkla enhetstester ===
-      - name: Unit Tests
+      - name: Run unit tests
         run: pytest
 
-      # === Utvärdera modellen (RMSE, precision, recall) ===
-      - name: Evaluate model
-        run: python evaluate.py
+      - name: Evaluate trained model
+        working-directory: .
+        run: |
+          python app/evaluate.py
 
-      # === Ladda upp modellartefakt ===
       - name: Upload model artifact
         uses: actions/upload-artifact@v4
         with:
           name: model-artifact
           path: app/model.joblib
-
-      # === Ladda upp metrics.json som artefakt ===
-      - name: Upload metrics
-        uses: actions/upload-artifact@v4
-        with:
-          name: metrics
-          path: metrics.json
